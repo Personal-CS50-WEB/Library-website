@@ -36,6 +36,6 @@ To install this website, follow these steps:
 1. Clone the repository to your local machine.
 2. Create a new MySQL database and import the database.sql file to create the necessary tables.
 3. Upload the files to your web server.
-4.Open the website in your web browser and start using the library management system!
+4. Open the website in your web browser and start using the library management system!
 
 
