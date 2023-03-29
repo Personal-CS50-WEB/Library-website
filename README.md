@@ -18,7 +18,7 @@ This is a PHP website for a library management system. The website provides an a
 ## Pages
 The website includes the following pages:
 
-- Index page: Displays the library's collection of books and provides a search bar for customers to search for books by name or author's name.
+- Index page: Displays the library's information.
 - Add book page: Allows administrators to add a new book to the library's collection.
 - Add borrower page: Allows administrators to add a new borrower to the library's records.
 - Check in/out page: Allows administrators to check in/out books for borrowers.
