@@ -3,24 +3,16 @@
 
 <head>
   <title>Book Reservation Confirmation</title>
-  <meta charset="UTF-8">
-  <meta name="description" content="Free HTML template">
-  <meta name="keywords" content="HTML, template, free">
-  <meta name="author" content="Nicola Tolin">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Styles -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-  <link href="vendor/animate/animate.css" rel="stylesheet" type="text/css" />
-  <link href="css/style.css" rel="stylesheet" type="text/css" />
+  <?php include('../head.html'); ?>
 </head>
 
 <body>
-  <?php include('layout.php'); ?>
+  <?php include('../layout.php'); ?>
   <div class="container-fluid contact">
     <?php
     if (!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true) {
       $_SESSION['msg'] = "You are not logged In";
-      header('Location: index.php');
+      header('Location: ../index.php');
     }
     // Get the title of the book we're reserving (from the URL)
     $booktoreserve = urldecode($_GET['reservation']);
@@ -37,10 +29,10 @@
 
     $_SESSION['reservedbooklist'] = $reservedbooklist;
     echo "Thank you.  <span class='blue_color'>$booktoreserve </span> has been added to your reservation list";
-    echo "<br><a class='nav-item' href=index.php>Return to home page</a>";
+    echo "<br><a class='nav-item' href=../index.php>Return to home page</a>";
     ?>
   </div>
-  <?php include('script.html'); ?>
+  <?php include('../script.html'); ?>
 </body>
 
 </html>

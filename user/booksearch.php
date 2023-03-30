@@ -2,30 +2,20 @@
 <html>
 
 <head>
-  <title>Administrative Book Search</title>
-  <meta charset="UTF-8">
-  <meta name="description" content="Free HTML template">
-  <meta name="keywords" content="HTML, template, free">
-  <meta name="author" content="Nicola Tolin">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Styles -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-  <link href="vendor/animate/animate.css" rel="stylesheet" type="text/css" />
-  <link href="css/style.css" rel="stylesheet" type="text/css" />
+  <title>Book Search Results</title>
+  <?php include('../head.html'); ?>
 </head>
 
 <body>
-  <?php include('layout.php'); ?>
+  <?php include('../layout.php'); ?>
   <div class="container-fluid contact">
     <h3>Book Search Results</h3>
     <hr>
+
     <?php
-    if (!isset($_SESSION["admin"]) && $_SESSION["admin"] != true) {
-      $_SESSION['msg'] = "Unauthorized ";
-      header('Location: index.php');
-    }
-    # This is the administrative book search --
-    # It includes links to check books out and in
+
+    # This version uses the "colourpreference" cookie
+    # This version implements logic for a "shopping cart" of reserved books
     
     # Get data from form
     $searchtitle = trim($_POST['searchtitle']);
@@ -41,13 +31,13 @@
 
     # Open the database
     try {
-      $db = new PDO("mysql:host=localhost;dbname=library", "assistant", "assistantpw");
+      $db = new PDO("mysql:host=localhost;dbname=library", "borrower", "borrowerpw");
       $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
       printf("Unable to open database: %s\n", $e->getMessage());
     }
 
-    # Build the query. You are allowed to search on title, author, or both
+    # Build the query. Users are allowed to search on title, author, or both
     
     $query = " select * from books";
     if ($searchtitle && !$searchauthor) { // Title search only
@@ -59,35 +49,33 @@
     if ($searchtitle && $searchauthor) { // Title and Author search
       $query = $query . " where title like '%" . $searchtitle . "%' and author like '%" . $searchauthor . "%'";
     }
-
-    // printf ("Debug: running the query %s <br>", $query);
     
     try {
       $sth = $db->query($query);
       $bookcount = $sth->rowCount(); # Only works for MySQL
       if ($bookcount == 0) {
         printf("Sorry, we did not find any matching books");
+        printf("<br> <a class='nav-item' href=../index.php>Back to home page</a>");
         exit;
       }
 
-      printf('<table class="table table-hover bg-white">', "#dddddd");
+      // If the user has specified a colour preference,
+      // use it for the table background
+      $colourpreference = "#dddddd";
+      printf('<table class="table table-hover bg-white">', $colourpreference);
       printf('<thead class="bg-light">');
-      printf('<tr><b><td>Title</td> <td>Author</td> <td>Check Out</td> <td> Check In </td></b> </tr>');
-      printf('</thead>');
+      printf('<tr><b><td>Title</td> <td>Author</td> <td>Reserve</td> </b> </tr>');
+      printf("</thead>");
       while ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
-        // We add links on each row to allow the assistant to check the book out or in
-        $checkoutanchor = "-";
-        $checkinanchor = "-";
-        if (!$row["onloan"])
-          $checkoutanchor = '<a href="checkout.php?bookid=' . urlencode($row["bookid"]) . '">Check Out</a>';
-        else
-          $checkinanchor = '<a href="checkin.php?bookid=' . urlencode($row["bookid"]) . '">Check In</a>';
+        // We add a link on each row to allow the user to reserve the book
+        $reserveanchor = '<a class="btn btn-link btn-rounded fw-bold"
+        data-mdb-ripple-color="dark" href="reservebook.php?reservation=' .
+          urlencode($row["title"]) . '"> Reserve </a>';
         printf(
-          "<tr> <td> %s </td> <td> %s </td> <td> %s </td> <td> %s </td> </tr>",
+          "<tr> <td> %s </td> <td> %s </td> <td> %s </td> </tr>",
           htmlentities($row["title"]),
           htmlentities($row["author"]),
-          $checkoutanchor,
-          $checkinanchor
+          $reserveanchor
         );
       }
     } catch (PDOException $e) {
@@ -95,9 +83,10 @@
     }
     printf("</table>");
     printf("<br> We found %s matching books", $bookcount);
-
+    printf("<br> <a class='nav-item' href=../index.php>Back to home page</a>");
     ?>
-    <?php include('script.html'); ?>
+  </div>
+  <?php include('../script.html'); ?>
 </body>
 
 </html>

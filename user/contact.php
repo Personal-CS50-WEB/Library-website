@@ -4,19 +4,11 @@
 <head>
   <!-- Meta -->
   <title>Contact Us</title>
-  <meta charset="UTF-8">
-  <meta name="description" content="Free HTML template">
-  <meta name="keywords" content="HTML, template, free">
-  <meta name="author" content="Nicola Tolin">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Styles -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-  <link href="vendor/animate/animate.css" rel="stylesheet" type="text/css" />
-  <link href="css/style.css" rel="stylesheet" type="text/css" />
+  <?php include('../head.html'); ?>
 </head>
 
 <body>
-  <?php include('layout.php'); ?>
+  <?php include('../layout.php'); ?>
   <!-- Contact -->
   <div class="container-fluid contact">
     <div class="col-md-10 offset-md-1">
@@ -61,7 +53,7 @@
   </div>
   <!-- End Contact Form -->
   <!-- Javascript -->
-  <?php include('script.html'); ?>
+  <?php include('../script.html'); ?>
   <!-- End Javascript -->
 </body>
 
